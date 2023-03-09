@@ -10,17 +10,7 @@ import UIKit
 class OnboardingViewController: UIPageViewController {
     
     // MARK: - UI Views
-    private lazy var nextButton: UIButton = NextButtonView()//{
-//        let button = UIButton()
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.layer.cornerRadius = 25//button.frame.width / 2
-//        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-//        button.setTitle(viewModel.nextButtonTitle, for: .normal)
-//        button.setTitleColor(UIColor.white, for: .normal)
-//        button.backgroundColor = .red
-//        button.addTarget(self, action: #selector(didPressNextButton(_:)), for: .touchUpInside)
-//        return button
-//    }()
+    private lazy var nextButton: NextButtonView = NextButtonView()
     
     private lazy var pageControl: VFEPageControl = {
         let pageControl = VFEPageControl()
@@ -31,14 +21,14 @@ class OnboardingViewController: UIPageViewController {
         return pageControl
     }()
     
-    private lazy var skipButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Skip", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(didPressSkipButton(_:)), for: .touchUpInside)
-        return button
-    }()
+    private lazy var skipButton: SkipButtonView = SkipButtonView()//{
+//        let button = UIButton()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.setTitle("Skip", for: .normal)
+//        button.setTitleColor(.black, for: .normal)
+//        button.addTarget(self, action: #selector(didPressSkipButton(_:)), for: .touchUpInside)
+//        return button
+//    }()
     
     // MARK: - Variables
     private var viewModel: OnboardingViewModelProtocol
@@ -81,7 +71,7 @@ class OnboardingViewController: UIPageViewController {
     
     // MARK: - Actions
     
-    @objc func didPressNextButton(_ sender: UIButton) {
+    @objc func didPressNextButton() {
         guard viewModel.shouldNavigateToNextPage() else {
             viewModel.didReachLastPage()
             return
@@ -136,21 +126,12 @@ extension OnboardingViewController {
         view.backgroundColor = .white
         setupSkipButtonView()
         setupNextButtonView()
-//        setupNextButtonStyling()
         setupPageControlView()
     }
     
-//    private func setupNextButtonStyling() {
-//        let styler = NextButtonStyler()
-//        nextButton.layer.cornerRadius = styler.style.cornerRadius
-//        nextButton.backgroundColor = styler.style.backgroundColor
-//        nextButton.setTitleColor(styler.style.foregroundColor, for: .normal)
-//        nextButton.layer.borderWidth = styler.style.borderWidth ?? 0
-//        nextButton.layer.borderColor = styler.style.borderColor?.cgColor
-//    }
-    
     private func setupSkipButtonView() {
         view.addSubview(skipButton)
+        skipButton.addTarget(self, action: #selector(didPressSkipButton(_:)), for: .touchUpInside)
         skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
         skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
     }
@@ -158,6 +139,7 @@ extension OnboardingViewController {
     private func setupNextButtonView() {
         nextButton.setTitle(viewModel.nextButtonTitle, for: .normal)
         view.addSubview(nextButton)
+        nextButton.onButtonPressed = didPressNextButton
         nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
         nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true

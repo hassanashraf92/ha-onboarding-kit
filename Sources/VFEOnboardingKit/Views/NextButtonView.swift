@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NextButtonView.swift
 //  
 //
 //  Created by Hassan Ashraf on 09/03/2023.
@@ -19,6 +19,7 @@ class NextButtonView: UIButton {
         self.setTitleColor(styler.style.foregroundColor, for: .normal)
         self.layer.borderWidth = styler.style.borderWidth ?? 0
         self.layer.borderColor = styler.style.borderColor?.cgColor
+        self.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -26,15 +27,10 @@ class NextButtonView: UIButton {
     }
     
     // Closure that will be called when the button is tapped
-    var onNextButtonTap: (() -> Void)?
-    
-    // Add a target to the button that calls the onNextButtonTap closure when it is tapped
-    func setup() {
-        addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
-    }
+    var onButtonPressed: (() -> Void)?
     
     @objc private func nextButtonTapped() {
-        onNextButtonTap?()
+        onButtonPressed?()
     }
 
 }
