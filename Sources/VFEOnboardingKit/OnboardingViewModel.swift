@@ -11,7 +11,6 @@ protocol OnboardingViewModelProtocol {
     var initialPageIndex: Int { get }
     var currentPageIndex: Int { get }
     var nextButtonTitle: String { get }
-//    var totalPagesCount: Int { get }
     func generatePageViewModels() -> [PageViewModelProtocol]
     func didPressSkipButton()
     func updateCurrent(index: Int)

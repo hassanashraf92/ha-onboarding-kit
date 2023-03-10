@@ -23,10 +23,9 @@ class NextButtonView: UIButton {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
     }
     
-    // Closure that will be called when the button is tapped
     var onButtonPressed: (() -> Void)?
     
     @objc private func nextButtonTapped() {

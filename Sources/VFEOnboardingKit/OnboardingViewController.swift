@@ -10,6 +10,7 @@ import UIKit
 class OnboardingViewController: UIPageViewController {
     
     // MARK: - UI Views
+    
     private lazy var nextButton: NextButtonView = NextButtonView()
     
     private lazy var pageControl: VFEPageControl = {
@@ -21,24 +22,12 @@ class OnboardingViewController: UIPageViewController {
         return pageControl
     }()
     
-    private lazy var skipButton: SkipButtonView = SkipButtonView()//{
-//        let button = UIButton()
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle("Skip", for: .normal)
-//        button.setTitleColor(.black, for: .normal)
-//        button.addTarget(self, action: #selector(didPressSkipButton(_:)), for: .touchUpInside)
-//        return button
-//    }()
+    private lazy var skipButton: SkipButtonView = SkipButtonView()
     
     // MARK: - Variables
-    private var viewModel: OnboardingViewModelProtocol
-    private let initialPageIndex: Int = 0
-    private var pages: [UIViewController] = []
     
-    var currentIndex: Int {
-        guard let vc = viewControllers?.first else { return 0 }
-        return pages.firstIndex(of: vc) ?? 0
-    }
+    private var viewModel: OnboardingViewModelProtocol
+    private lazy var pages: [UIViewController] = []
     
     // MARK: - Initialization
     
@@ -71,7 +60,7 @@ class OnboardingViewController: UIPageViewController {
     
     // MARK: - Actions
     
-    @objc func didPressNextButton() {
+    @objc private func didPressNextButton() {
         guard viewModel.shouldNavigateToNextPage() else {
             viewModel.didReachLastPage()
             return
@@ -86,16 +75,15 @@ class OnboardingViewController: UIPageViewController {
             strongSelf.viewModel.updateCurrent(index: strongSelf.viewModel.currentPageIndex + 1)
             strongSelf.updatePageControlSelectedIndex()
         }
-//        viewModel.didPressNextButton()
     }
     
-    @objc func didPressSkipButton(_ sender: UIButton) {
+    @objc private func didPressSkipButton(_ sender: UIButton) {
         viewModel.didPressSkipButton()
     }
     
     // MARK: - Setup UIPageViewController
     
-    func setupPageViewController() {
+    private func setupPageViewController() {
         delegate = self
         dataSource = self
         viewModel.generatePageViewModels().forEach { model in
@@ -103,7 +91,7 @@ class OnboardingViewController: UIPageViewController {
             pages.append(pageViewController)
         }
         setViewControllers(
-            [pages[initialPageIndex]],
+            [pages[viewModel.initialPageIndex]],
             direction: .forward,
             animated: true,
             completion: nil
@@ -160,14 +148,10 @@ extension OnboardingViewController {
 // MARK: - UIPageViewControllerDataSource
 extension OnboardingViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
-//        viewModel.updateCurrent(index: viewControllerIndex)
         return viewModel.shouldNavigateToPreviousPage() ? pages[viewModel.currentPageIndex - 1] : nil
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
-//        viewModel.updateCurrent(index: viewControllerIndex)
         return viewModel.shouldNavigateToNextPage() ? pages[viewModel.currentPageIndex + 1] : nil
     }
 }
@@ -183,24 +167,14 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
         updatePageControlSelectedIndex()
     }
     
-//    func isOnLastPage() -> Bool {
-//        guard let pageViewController = self.pageViewController else {
-//            return false
-//        }
-//
-//        let currentPageIndex = self.presentationIndex(for: pageViewController)
-//        let totalPages = pages.count
-//
-//        return currentPageIndex == totalPages - 1
-//    }
 }
 
 
 // MARK: - Testing Variables
 
 extension OnboardingViewController {
-    var testNextButton: UIButton { return nextButton }
-    var testSkipButton: UIButton { return skipButton }
+    var testNextButton: NextButtonView { return nextButton }
+    var testSkipButton: SkipButtonView { return skipButton }
     var testPageControl: VFEPageControl { return pageControl }
     var testPages: [UIViewController] { return pages }
 }

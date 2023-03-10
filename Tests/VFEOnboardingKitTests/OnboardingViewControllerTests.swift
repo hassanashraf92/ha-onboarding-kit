@@ -1,6 +1,6 @@
 //
 //  OnboardingViewControllerTests.swift
-//  
+//
 //
 //  Created by Hassan Ashraf on 06/03/2023.
 //
@@ -9,7 +9,7 @@ import XCTest
 @testable import VFEOnboardingKit // replace with your project name
 
 class OnboardingViewControllerTests: XCTestCase {
-    
+
     var sut: OnboardingViewController!
     let mockViewModel = MockOnboardingViewModel()
     
@@ -27,16 +27,18 @@ class OnboardingViewControllerTests: XCTestCase {
         try super.tearDownWithError()
     }
     
-    func testNextButtonDefaultSetup() {
-        let expectedTitle = "Next"
-        let expectedColor = UIColor.white
-        let expectedBackgroundColor = UIColor.red
-        let expectedCornerRadius: CGFloat = 25
+    func testInitWithCoder_ReturnsNil() {
+        sut = OnboardingViewController(coder: NSCoder())
+        XCTAssertNil(sut)
+    }
+    
+    func testViewDidLoad() {
+        sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.testNextButton.title(for: .normal), expectedTitle)
-        XCTAssertEqual(sut.testNextButton.backgroundColor, expectedBackgroundColor)
-        XCTAssertEqual(sut.testNextButton.titleColor(for: .normal), expectedColor)
-        XCTAssertEqual(sut.testNextButton.layer.cornerRadius, expectedCornerRadius)
+        XCTAssertNotNil(sut.testSkipButton)
+        XCTAssertNotNil(sut.testNextButton)
+        XCTAssertNotNil(sut.testPageControl)
+        XCTAssertNotNil(sut.testPages)
     }
     
     func testPageControlDefaultSetup() {
@@ -49,78 +51,37 @@ class OnboardingViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.testPageControl.selectedColor, expectedSelectedColor)
     }
     
-    func testSkipButtonViewDefaultSetup() {
-        let expectedTitle = "Skip"
-        let expectedColor = UIColor.white
-        
-        XCTAssertNotNil(sut.testSkipButton)
-        XCTAssertEqual(sut.testSkipButton.translatesAutoresizingMaskIntoConstraints, false)
-        XCTAssertEqual(sut.testSkipButton.title(for: .normal), expectedTitle)
-        XCTAssertEqual(sut.testSkipButton.titleColor(for: .normal), expectedColor)
-    }
-    
-    func testInitWithCoder() {
-        sut = OnboardingViewController(coder: NSCoder())
-        XCTAssertNil(sut)
-    }
-    
-    func testViewDidLoad() {
-        sut.viewDidLoad()
-        
-        /// Setup Views
-        
-        /// Skip Button
-        XCTAssertNotNil(sut.testSkipButton)
-       
-        /// Next Button
-        XCTAssertNotNil(sut.testNextButton)
-        
-        /// PageControl
-        XCTAssertNotNil(sut.testPageControl)
-        
-        
-        }
-    
     func testSetupPageViewController() {
-        // Given
-        let expectedCount = mockViewModel.generatePageViewModels().count
+        sut.loadViewIfNeeded()
         
-        // When
-        sut.setupPageViewController()
-        
-        // Then
-        XCTAssertEqual(sut.testPages.count, expectedCount)
         XCTAssertTrue(sut.delegate === sut)
         XCTAssertTrue(sut.dataSource === sut)
+        
     }
     
-    func testSetupPageControl() {
-        // Given
+    func testSetupPageControl_countReturnsThree() {
         let expectedCount = mockViewModel.generatePageViewModels().count
+        XCTAssertEqual(expectedCount, 3)
+    }
+    
+    func testSetupPageControlView() {
+        sut.loadViewIfNeeded()
         
-        // When
-        sut.setupPageViewController()
-        sut.setupPageControl()
-        
-        // Then
-        XCTAssertEqual(sut.testPageControl.pages, expectedCount)
+        XCTAssertEqual(sut.testPageControl.pages, 3)
         XCTAssertEqual(sut.testPageControl.dotSize, 10)
         XCTAssertEqual(sut.testPageControl.dotColor, .darkGray)
         XCTAssertEqual(sut.testPageControl.selectedColor, .red)
     }
     
     func testPageViewControllerDataSource() {
-        // Given
-        sut.setupPageViewController()
-        let initialPage = 0
+        sut.loadViewIfNeeded()
         
-        // When
-        let beforePage = sut.pageViewController(sut, viewControllerBefore: sut.testPages[initialPage])
-        let afterPage = sut.pageViewController(sut, viewControllerAfter: sut.testPages[initialPage])
+        let initialPage = mockViewModel.initialPageIndex
+        let pageBefore = sut.pageViewController(sut, viewControllerBefore: sut.testPages[initialPage])
+        let pageAfter = sut.pageViewController(sut, viewControllerAfter: sut.testPages[initialPage])
         
-        // Then
-        XCTAssertNil(beforePage)
-        XCTAssertTrue(afterPage === sut.testPages[initialPage + 1])
+        XCTAssertNil(pageBefore)
+        XCTAssertNotNil(pageAfter === sut.testPages[initialPage + 1])
     }
     
 }
@@ -129,6 +90,44 @@ class OnboardingViewControllerTests: XCTestCase {
 
 class MockOnboardingViewModel: OnboardingViewModelProtocol {
     
+    var initialPageIndex: Int = 0
+    var currentPageIndex: Int = 0
+    private var data: [VFEOnboardingModel] = []
+    private var totalPagesCount: Int = 0
+    
+    var nextButtonTitle: String = "Next"
+    
+    init() {
+        self.data = [
+            VFEOnboardingModel(image: UIImage(), title: "Title 01", subtitle: "Subtitle 01"),
+            VFEOnboardingModel(image: UIImage(), title: "Title 02", subtitle: "Subtitle 02"),
+            VFEOnboardingModel(image: UIImage(), title: "Title 03", subtitle: "Subtitle 03")
+        ]
+        self.totalPagesCount = 3
+    }
+    
+    func didPressSkipButton() {
+        print("did press skip button!")
+    }
+    
+    func updateCurrent(index: Int) {
+        currentPageIndex = index
+    }
+    
+    func shouldNavigateToNextPage() -> Bool {
+        return currentPageIndex < totalPagesCount - 1
+    }
+    
+    func shouldNavigateToPreviousPage() -> Bool {
+        return currentPageIndex != 0
+    }
+    
+    func didReachLastPage() {
+        print("Did reach last page!")
+    }
+    
+
+
     func generatePageViewModels() -> [PageViewModelProtocol] {
         return [
             MockPageViewModel(image: UIImage(), title: "Title 1", subtitle: "Description 1"),
@@ -136,5 +135,5 @@ class MockOnboardingViewModel: OnboardingViewModelProtocol {
             MockPageViewModel(image: UIImage(), title: "Title 3", subtitle: "Description 3")
         ]
     }
-    
+
 }

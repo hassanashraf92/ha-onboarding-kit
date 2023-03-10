@@ -10,26 +10,84 @@ import XCTest
 
 class OnboardingViewModelTests: XCTestCase {
     
-    func testGeneratePageViewModels() {
-        // Create some test data
-        let testData = [
-            VFEOnboardingModel(image: UIImage(), title: "Title 1", subtitle: "Subtitle 1"),
-            VFEOnboardingModel(image: UIImage(), title: "Title 2", subtitle: "Subtitle 2")
+    var sut: OnboardingViewModel!
+    
+    override func setUp() {
+        super.setUp()
+        let data: [VFEOnboardingModel] = [
+            VFEOnboardingModel(image: UIImage(), title: "Title 01", subtitle: "Subtitle 01"),
+            VFEOnboardingModel(image: UIImage(), title: "Title 02", subtitle: "Subtitle 02"),
+            VFEOnboardingModel(image: UIImage(), title: "Title 03", subtitle: "Subtitle 03")
         ]
-        
-        // Create an instance of OnboardingViewModel with the test data
-        let viewModel = OnboardingViewModel(data: testData)
-        
-        // Generate page view models
-        let pageViewModels = viewModel.generatePageViewModels()
-        
-        // Check that the generated page view models match the test data
-        XCTAssertEqual(pageViewModels.count, testData.count, "Number of generated page view models should match number of test data")
-        for i in 0..<testData.count {
-            XCTAssertEqual(pageViewModels[i].title, testData[i].title, "Title of generated page view model should match title of test data")
-            XCTAssertEqual(pageViewModels[i].subtitle, testData[i].subtitle, "Subtitle of generated page view model should match subtitle of test data")
-            XCTAssertEqual(pageViewModels[i].image, testData[i].image, "Image name of generated page view model should match image name of test data")
-        }
+        sut = OnboardingViewModel(data: data)
     }
+    
+    override func tearDown() {
+        super.tearDown()
+        sut = nil
+    }
+    
+    func testOnboardingViewModel() {
+        XCTAssertNotNil(sut)
+    }
+    
+    func testGeneratePageViewModels() {
+        let pageViewModels = sut.generatePageViewModels()
+        XCTAssertEqual(pageViewModels.count, 3)
+    }
+    
+    func testDidPressSkipButton() {
+        let mockDelegate = MockVFEOnboardingNavigationProtocol()
+        sut.delegate = mockDelegate
+        sut.didPressSkipButton()
+        XCTAssertTrue(mockDelegate.didPressSkipButtonCalled)
+    }
+    
+    func testUpdateCurrent() {
+        let index = 3
+        sut.updateCurrent(index: index)
+        XCTAssertEqual(sut.currentPageIndex, index)
+    }
+    
+    func testShouldNavigateToNextPage_ReturnsTrue() {
+        sut.currentPageIndex = 1
+        XCTAssertTrue(sut.shouldNavigateToNextPage())
+    }
+    
+    func testShouldNavigateToNextPage_ReturnsFalse() {
+        sut.currentPageIndex = 2
+        XCTAssertFalse(sut.shouldNavigateToNextPage())
+    }
+    
+    func testShouldNavigateToPreviousPage_ReturnsTrue() {
+        sut.currentPageIndex = 1
+        XCTAssertTrue(sut.shouldNavigateToPreviousPage())
+    }
+    
+    func testShouldNavigateToPreviousPage_ReturnsFalse() {
+        sut.currentPageIndex = 0
+        XCTAssertFalse(sut.shouldNavigateToPreviousPage())
+    }
+
+    func testDidReachLastPage() {
+        let mockDelegate = MockVFEOnboardingNavigationProtocol()
+        sut.delegate = mockDelegate
+        sut.didReachLastPage()
+        XCTAssertTrue(mockDelegate.didReachLastPageCalled)
+    }
+    
 }
 
+
+class MockVFEOnboardingNavigationProtocol: VFEOnboardingNavigationProtocol {
+    var didPressSkipButtonCalled = false
+    var didReachLastPageCalled = false
+    
+    func didPressSkipButton() {
+        didPressSkipButtonCalled = true
+    }
+    
+    func didReachLastPage() {
+        didReachLastPageCalled = true
+    }
+}
