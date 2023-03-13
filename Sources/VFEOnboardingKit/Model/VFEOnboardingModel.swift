@@ -16,10 +16,20 @@ public struct VFEOnboardingModel {
     let image: UIImage
     let title: String
     let subtitle: String
+    let skipButtonTitle: String
+    let actionButtonTitle: String
     
-    public init(image: UIImage, title: String, subtitle: String) {
+    public init(
+        image: UIImage,
+        title: String,
+        subtitle: String,
+        skipButtonTitle: String = "Skip",
+        actionButtonTitle: String = "Next"
+    ) {
         self.image = image
         self.title = title
         self.subtitle = subtitle
+        self.skipButtonTitle = skipButtonTitle
+        self.actionButtonTitle = actionButtonTitle
     }
 }

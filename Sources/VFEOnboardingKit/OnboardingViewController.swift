@@ -125,7 +125,7 @@ extension OnboardingViewController {
     }
     
     private func setupNextButtonView() {
-        nextButton.setTitle(viewModel.nextButtonTitle, for: .normal)
+        nextButton.setTitle(viewModel.getActionButtonTitle(), for: .normal)
         view.addSubview(nextButton)
         nextButton.onButtonPressed = didPressNextButton
         nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
@@ -142,6 +142,8 @@ extension OnboardingViewController {
     
     private func updatePageControlSelectedIndex() {
         pageControl.selectedPage = viewModel.currentPageIndex
+        nextButton.setTitle(viewModel.getActionButtonTitle(), for: .normal)
+        skipButton.setTitle(viewModel.getSkipButtonTitle(), for: .normal)
     }
 }
 

@@ -15,9 +15,9 @@ class OnboardingViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let data: [VFEOnboardingModel] = [
-            VFEOnboardingModel(image: UIImage(), title: "Title 01", subtitle: "Subtitle 01"),
-            VFEOnboardingModel(image: UIImage(), title: "Title 02", subtitle: "Subtitle 02"),
-            VFEOnboardingModel(image: UIImage(), title: "Title 03", subtitle: "Subtitle 03")
+            VFEOnboardingModel(image: UIImage(), title: "Title 01", subtitle: "Subtitle 01", actionButtonTitle: "Next"),
+            VFEOnboardingModel(image: UIImage(), title: "Title 02", subtitle: "Subtitle 02", actionButtonTitle: "Next"),
+            VFEOnboardingModel(image: UIImage(), title: "Title 03", subtitle: "Subtitle 03", actionButtonTitle: "Go")
         ]
         sut = OnboardingViewModel(data: data)
     }
@@ -74,6 +74,25 @@ class OnboardingViewModelTests: XCTestCase {
         sut.delegate = mockDelegate
         sut.didReachLastPage()
         XCTAssertTrue(mockDelegate.didReachLastPageCalled)
+    }
+    
+    func testNextButtonTitle_ReturnsNext() {
+        sut.currentPageIndex = 0
+        XCTAssertEqual(sut.getActionButtonTitle(), "Next")
+    }
+    
+    func testNextButtonTitle_ReturnsGo() {
+        sut.currentPageIndex = 2
+        XCTAssertEqual(sut.getActionButtonTitle(), "Go")
+    }
+    
+    func testSkipButtonTitle_ReturnsSkip() {
+        sut.currentPageIndex = 0
+        XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
+        sut.currentPageIndex = 1
+        XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
+        sut.currentPageIndex = 2
+        XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
     }
     
 }
