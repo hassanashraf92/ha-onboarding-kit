@@ -10,20 +10,20 @@ import Foundation
 protocol OnboardingViewModelProtocol {
     var initialPageIndex: Int { get }
     var currentPageIndex: Int { get }
-    var nextButtonTitle: String { get }
     func generatePageViewModels() -> [PageViewModelProtocol]
     func didPressSkipButton()
     func updateCurrent(index: Int)
     func shouldNavigateToNextPage() -> Bool
     func shouldNavigateToPreviousPage() -> Bool
     func didReachLastPage()
+    func getActionButtonTitle() -> String
+    func getSkipButtonTitle() -> String
 }
 
 class OnboardingViewModel: OnboardingViewModelProtocol {
     
     var initialPageIndex: Int = 0
     var currentPageIndex: Int = 0
-    var nextButtonTitle: String = "Next"
     private var totalPagesCount: Int = 0
     
     let data: [VFEOnboardingModel]
@@ -57,5 +57,15 @@ class OnboardingViewModel: OnboardingViewModelProtocol {
     
     func didReachLastPage() {
         delegate?.didReachLastPage()
+    }
+    
+    func getActionButtonTitle() -> String {
+        guard currentPageIndex < data.count else { return "" }
+        return data[currentPageIndex].actionButtonTitle
+    }
+    
+    func getSkipButtonTitle() -> String {
+        guard currentPageIndex < data.count else { return "" }
+        return data[currentPageIndex].skipButtonTitle
     }
 }
