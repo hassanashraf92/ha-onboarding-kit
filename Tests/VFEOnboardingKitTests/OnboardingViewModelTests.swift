@@ -94,8 +94,6 @@ class OnboardingViewModelTests: XCTestCase {
         sut.currentPageIndex = 2
         XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
     }
-    
->>>>>>> development
 }
 
 
