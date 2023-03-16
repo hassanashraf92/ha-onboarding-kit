@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VFEOnboardingKit // replace with your project name
+@testable import VFEOnboardingKit
 
 class OnboardingViewControllerTests: XCTestCase {
 

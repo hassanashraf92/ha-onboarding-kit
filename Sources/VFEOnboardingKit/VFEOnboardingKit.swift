@@ -41,6 +41,7 @@ public class VFEOnboardingKit {
     // MARK: - Launch onboarding on top of presented view controller.
     
     public func launchOnboarding(rootViewController: UIViewController) {
+        guard !data.isEmpty else { return }
         self.rootViewController = rootViewController
         rootViewController.present(onboardingViewController, animated: true)
     }

@@ -31,16 +31,4 @@ class VFEOnboardingKitTests: XCTestCase {
         rootViewController = nil
         super.tearDown()
     }
-    
-    func testLaunchOnboardingKit() {
-        sut.launchOnboarding(rootViewController: rootViewController)
-        print(rootViewController)
-//        let onboardingViewController = OnboardingViewController(viewModel: OnboardingViewModel(data: [VFEOnboardingModel(image: UIImage(), title: "Title 1", subtitle: "Subtitle 1")]), transitionStyle: .scroll, navigationOrientation: .horizontal)
-//        onboardingViewController.loadViewIfNeeded()
-//        rootViewController.present(onboardingViewController, animated: true)
-//        print(rootViewController.viewCo)
-        print(rootViewController.presentedViewController)
-        print(rootViewController.presentingViewController)
-//        XCTAssertTrue(rootViewController.presentedViewController is OnboardingViewController)
-    }
 }
