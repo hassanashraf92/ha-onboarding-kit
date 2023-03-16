@@ -75,7 +75,7 @@ class OnboardingViewModelTests: XCTestCase {
         sut.didReachLastPage()
         XCTAssertTrue(mockDelegate.didReachLastPageCalled)
     }
-    
+
     func testNextButtonTitle_ReturnsNext() {
         sut.currentPageIndex = 0
         XCTAssertEqual(sut.getActionButtonTitle(), "Next")
@@ -94,7 +94,6 @@ class OnboardingViewModelTests: XCTestCase {
         sut.currentPageIndex = 2
         XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
     }
-    
 }
 
 
