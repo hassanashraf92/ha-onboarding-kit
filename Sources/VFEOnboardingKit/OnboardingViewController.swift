@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VFEPageControl
 
 class OnboardingViewController: UIPageViewController {
     

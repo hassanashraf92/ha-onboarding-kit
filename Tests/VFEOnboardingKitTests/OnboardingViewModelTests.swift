@@ -85,7 +85,7 @@ class OnboardingViewModelTests: XCTestCase {
         sut.currentPageIndex = 2
         XCTAssertEqual(sut.getActionButtonTitle(), "Go")
     }
-    
+
     func testSkipButtonTitle_ReturnsSkip() {
         sut.currentPageIndex = 0
         XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
@@ -94,8 +94,6 @@ class OnboardingViewModelTests: XCTestCase {
         sut.currentPageIndex = 2
         XCTAssertEqual(sut.getSkipButtonTitle(), "Skip")
     }
-    
->>>>>>> development
 }
 
 
