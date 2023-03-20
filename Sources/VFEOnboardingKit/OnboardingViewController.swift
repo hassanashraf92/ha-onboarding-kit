@@ -120,14 +120,15 @@ extension OnboardingViewController {
     
     private func setupSkipButtonView() {
         view.addSubview(skipButton)
+        skipButton.setTitle(viewModel.getSkipButtonTitle(), for: .normal)
         skipButton.addTarget(self, action: #selector(didPressSkipButton(_:)), for: .touchUpInside)
         skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
         skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
     }
     
     private func setupNextButtonView() {
-        nextButton.setTitle(viewModel.getActionButtonTitle(), for: .normal)
         view.addSubview(nextButton)
+        nextButton.setTitle(viewModel.getActionButtonTitle(), for: .normal)
         nextButton.onButtonPressed = didPressNextButton
         nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
         nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12).isActive = true
