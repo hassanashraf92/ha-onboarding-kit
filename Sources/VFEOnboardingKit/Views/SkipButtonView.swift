@@ -13,7 +13,7 @@ class SkipButtonView: UIButton {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.setTitleColor(.black, for: .normal)
-        self.setTitle("Skip", for: .normal)
+        self.setTitle("", for: .normal)
         self.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
     }
     
