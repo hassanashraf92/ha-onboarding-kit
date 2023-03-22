@@ -80,7 +80,7 @@ class OnboardingViewModelTests: XCTestCase {
         sut.currentPageIndex = 0
         XCTAssertEqual(sut.getActionButtonTitle(), "Next")
     }
-    
+
     func testNextButtonTitle_ReturnsGo() {
         sut.currentPageIndex = 2
         XCTAssertEqual(sut.getActionButtonTitle(), "Go")
