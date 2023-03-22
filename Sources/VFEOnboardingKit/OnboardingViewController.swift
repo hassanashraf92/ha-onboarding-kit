@@ -132,6 +132,7 @@ extension OnboardingViewController {
     }
     
     private func setupNextButtonView() {
+        nextButton.setTitle(viewModel.getActionButtonTitle(), for: .normal)
         view.addSubview(nextButton)
         nextButton.setTitle(viewModel.getActionButtonTitle(), for: .normal)
         nextButton.onButtonPressed = didPressNextButton
