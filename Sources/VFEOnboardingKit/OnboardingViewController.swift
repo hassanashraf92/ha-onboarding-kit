@@ -20,6 +20,11 @@ class OnboardingViewController: UIPageViewController {
         pageControl.dotSize = 10
         pageControl.dotColor = .darkGray
         pageControl.selectedColor = .red
+        if UIView.appearance().semanticContentAttribute == .forceRightToLeft {
+            pageControl.transform = CGAffineTransform(scaleX: -1, y: 1)
+        } else {
+            pageControl.transform = .identity
+        }
         return pageControl
     }()
     
