@@ -33,7 +33,7 @@ class PageViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.text = ""
         return label
     }()
