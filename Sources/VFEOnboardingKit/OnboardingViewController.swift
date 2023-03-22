@@ -71,9 +71,10 @@ class OnboardingViewController: UIPageViewController {
             viewModel.didReachLastPage()
             return
         }
+        let isRTL = UIView.appearance().semanticContentAttribute == .forceRightToLeft
         self.setViewControllers(
             [pages[viewModel.currentPageIndex + 1]],
-            direction: .forward,
+            direction: isRTL ? .reverse : .forward,
             animated: true,
             completion: nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
