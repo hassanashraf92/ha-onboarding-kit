@@ -14,8 +14,9 @@ class PageViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentMode = .bottom
+        view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
+//        view.backgroundColor = .red
         return view
     }()
     
@@ -70,12 +71,12 @@ class PageViewController: UIViewController {
         view.addSubview(imageView)
         view.addSubview(stackView)
         
-        imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 36).isActive = true
         imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.65).isActive = true
+        imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.60).isActive = true
         
-        stackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 36).isActive = true
+        stackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 12).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
         
